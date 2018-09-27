@@ -9,17 +9,16 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 
 public class RequiredArgumentBuilder<S, T> extends ArgumentBuilder<S, RequiredArgumentBuilder<S, T>> {
-    private final String name;
+
     private final ArgumentType<T> type;
     private SuggestionProvider<S> suggestionsProvider = null;
 
-    private RequiredArgumentBuilder(final String name, final ArgumentType<T> type) {
-        this.name = name;
+    private RequiredArgumentBuilder(final ArgumentType<T> type) {
         this.type = type;
     }
 
-    public static <S, T> RequiredArgumentBuilder<S, T> argument(final String name, final ArgumentType<T> type) {
-        return new RequiredArgumentBuilder<>(name, type);
+    public static <S, T> RequiredArgumentBuilder<S, T> argument(final ArgumentType<T> type) {
+        return new RequiredArgumentBuilder<>(type);
     }
 
     public RequiredArgumentBuilder<S, T> suggests(final SuggestionProvider<S> provider) {
@@ -40,12 +39,8 @@ public class RequiredArgumentBuilder<S, T> extends ArgumentBuilder<S, RequiredAr
         return type;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public ArgumentCommandNode<S, T> build() {
-        final ArgumentCommandNode<S, T> result = new ArgumentCommandNode<>(getName(), getType(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider());
+        final ArgumentCommandNode<S, T> result = new ArgumentCommandNode<>(getType(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider());
 
         for (final CommandNode<S> argument : getArguments()) {
             result.addChild(argument);

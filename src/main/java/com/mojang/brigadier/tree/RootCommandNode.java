@@ -4,6 +4,7 @@
 package com.mojang.brigadier.tree;
 
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.CommandContextBuilder;
@@ -21,8 +22,20 @@ public class RootCommandNode<S> extends CommandNode<S> {
     }
 
     @Override
-    public String getName() {
-        return "";
+    public ArgumentType<?> getType() {
+        return new ArgumentType<RootCommandNode<S>>() {
+
+            @Override
+            public String getName() {
+                return "";
+            }
+
+            @Override
+            public RootCommandNode<S> parse(StringReader reader) throws CommandSyntaxException {
+                return RootCommandNode.this;
+            }
+            
+        };
     }
 
     @Override

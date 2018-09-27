@@ -26,7 +26,7 @@ public class BoolArgumentTypeTest {
 
     @Before
     public void setUp() throws Exception {
-        type = bool();
+        type = bool("bool");
     }
 
     @Test

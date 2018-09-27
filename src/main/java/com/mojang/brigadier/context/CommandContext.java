@@ -7,6 +7,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.primitives.Primitives;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.List;
@@ -64,20 +65,30 @@ public class CommandContext<S> {
         return source;
     }
 
-    @SuppressWarnings("unchecked")
-    public <V> V getArgument(final String name, final Class<V> clazz) {
-        final ParsedArgument<S, ?> argument = arguments.get(name);
+//    @SuppressWarnings("unchecked")
+//    public <V> V getArgument(final String name, final Class<V> clazz) {
+//        final ParsedArgument<S, ?> argument = arguments.get(name);
+//
+//        if (argument == null) {
+//            throw new IllegalArgumentException("No such argument '" + name + "' exists on this command");
+//        }
+//
+//        final Object result = argument.getResult();
+//        if (Primitives.wrap(clazz).isAssignableFrom(result.getClass())) {
+//            return (V) result;
+//        } else {
+//            throw new IllegalArgumentException("Argument '" + name + "' is defined as " + result.getClass().getSimpleName() + ", not " + clazz);
+//        }
+//    }
+    
+    public <V> V getArgument(final ArgumentType<V> arg) {
+        final ParsedArgument<S, ?> argument = arguments.get(arg.getName());
 
         if (argument == null) {
-            throw new IllegalArgumentException("No such argument '" + name + "' exists on this command");
+            throw new IllegalArgumentException("No such argument '" + arg.getName() + "' exists on this command");
         }
 
-        final Object result = argument.getResult();
-        if (Primitives.wrap(clazz).isAssignableFrom(result.getClass())) {
-            return (V) result;
-        } else {
-            throw new IllegalArgumentException("Argument '" + name + "' is defined as " + result.getClass().getSimpleName() + ", not " + clazz);
-        }
+        return (V) argument.getResult();
     }
 
     @Override

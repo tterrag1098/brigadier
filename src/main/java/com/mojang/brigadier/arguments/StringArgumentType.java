@@ -10,27 +10,24 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class StringArgumentType implements ArgumentType<String> {
+public class StringArgumentType extends SimpleArgumentType<String> {
     private final StringType type;
 
-    private StringArgumentType(final StringType type) {
+    private StringArgumentType(String name, final StringType type) {
+        super(name);
         this.type = type;
     }
 
-    public static StringArgumentType word() {
-        return new StringArgumentType(StringType.SINGLE_WORD);
+    public static StringArgumentType word(String name) {
+        return new StringArgumentType(name, StringType.SINGLE_WORD);
     }
 
-    public static StringArgumentType string() {
-        return new StringArgumentType(StringType.QUOTABLE_PHRASE);
+    public static StringArgumentType string(String name) {
+        return new StringArgumentType(name, StringType.QUOTABLE_PHRASE);
     }
 
-    public static StringArgumentType greedyString() {
-        return new StringArgumentType(StringType.GREEDY_PHRASE);
-    }
-
-    public static String getString(final CommandContext<?> context, final String name) {
-        return context.getArgument(name, String.class);
+    public static StringArgumentType greedyString(String name) {
+        return new StringArgumentType(name, StringType.GREEDY_PHRASE);
     }
 
     public StringType getType() {

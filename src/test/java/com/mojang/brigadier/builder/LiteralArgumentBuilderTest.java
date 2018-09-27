@@ -43,8 +43,8 @@ public class LiteralArgumentBuilderTest {
 
     @Test
     public void testBuildWithChildren() throws Exception {
-        builder.then(argument("bar", integer()));
-        builder.then(argument("baz", integer()));
+        builder.then(argument(integer("bar")));
+        builder.then(argument(integer("baz")));
         final LiteralCommandNode<Object> node = builder.build();
 
         assertThat(node.getChildren(), hasSize(2));

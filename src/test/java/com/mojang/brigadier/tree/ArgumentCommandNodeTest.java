@@ -31,7 +31,7 @@ public class ArgumentCommandNodeTest extends AbstractCommandNodeTest {
 
     @Before
     public void setUp() throws Exception {
-        node = argument("foo", integer()).build();
+        node = argument(integer("foo")).build();
         contextBuilder = new CommandContextBuilder<>(new CommandDispatcher<>(), new Object(), new RootCommandNode<>(), 0);
     }
 
@@ -61,27 +61,27 @@ public class ArgumentCommandNodeTest extends AbstractCommandNodeTest {
 
         new EqualsTester()
             .addEqualityGroup(
-                argument("foo", integer()).build(),
-                argument("foo", integer()).build()
+                argument(integer("foo")).build(),
+                argument(integer("foo")).build()
             )
             .addEqualityGroup(
-                argument("foo", integer()).executes(command).build(),
-                argument("foo", integer()).executes(command).build()
+                argument(integer("foo")).executes(command).build(),
+                argument(integer("foo")).executes(command).build()
             )
             .addEqualityGroup(
-                argument("bar", integer(-100, 100)).build(),
-                argument("bar", integer(-100, 100)).build()
+                argument(integer("bar", -100, 100)).build(),
+                argument(integer("bar", -100, 100)).build()
             )
             .addEqualityGroup(
-                argument("foo", integer(-100, 100)).build(),
-                argument("foo", integer(-100, 100)).build()
+                argument(integer("foo", -100, 100)).build(),
+                argument(integer("foo", -100, 100)).build()
             )
             .addEqualityGroup(
-                argument("foo", integer()).then(
-                    argument("bar", integer())
+                argument(integer("foo")).then(
+                    argument(integer("bar"))
                 ).build(),
-                argument("foo", integer()).then(
-                    argument("bar", integer())
+                argument(integer("foo")).then(
+                    argument(integer("bar"))
                 ).build()
             )
             .testEquals();
@@ -90,7 +90,7 @@ public class ArgumentCommandNodeTest extends AbstractCommandNodeTest {
     @Test
     public void testCreateBuilder() throws Exception {
         final RequiredArgumentBuilder<Object, Integer> builder = node.createBuilder();
-        assertThat(builder.getName(), is(node.getName()));
+        assertThat(builder.getType().getName(), is(node.getName()));
         assertThat(builder.getType(), is(node.getType()));
         assertThat(builder.getRequirement(), is(node.getRequirement()));
         assertThat(builder.getCommand(), is(node.getCommand()));

@@ -10,6 +10,7 @@ import com.mojang.brigadier.AmbiguityConsumer;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.CommandContextBuilder;
@@ -143,7 +144,11 @@ public abstract class CommandNode<S> implements Comparable<CommandNode<S>> {
         return requirement;
     }
 
-    public abstract String getName();
+    public final String getName() {
+        return getType().getName();
+    }
+    
+    public abstract ArgumentType<?> getType();
 
     public abstract String getUsageText();
 

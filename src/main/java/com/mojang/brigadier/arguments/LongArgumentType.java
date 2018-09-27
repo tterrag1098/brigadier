@@ -10,31 +10,28 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class LongArgumentType implements ArgumentType<Long> {
+public class LongArgumentType extends SimpleArgumentType<Long> {
     private static final Collection<String> EXAMPLES = Arrays.asList("0", "123", "-123");
 
     private final long minimum;
     private final long maximum;
 
-    private LongArgumentType(final long minimum, final long maximum) {
+    private LongArgumentType(String name, final long minimum, final long maximum) {
+        super(name);
         this.minimum = minimum;
         this.maximum = maximum;
     }
 
-    public static LongArgumentType longArg() {
-        return longArg(Long.MIN_VALUE);
+    public static LongArgumentType longArg(String name) {
+        return longArg(name, Long.MIN_VALUE);
     }
 
-    public static LongArgumentType longArg(final long min) {
-        return longArg(min, Long.MAX_VALUE);
+    public static LongArgumentType longArg(String name, final long min) {
+        return longArg(name, min, Long.MAX_VALUE);
     }
 
-    public static LongArgumentType longArg(final long min, final long max) {
-        return new LongArgumentType(min, max);
-    }
-
-    public static long getLong(final CommandContext<?> context, final String name) {
-        return context.getArgument(name, long.class);
+    public static LongArgumentType longArg(String name, final long min, final long max) {
+        return new LongArgumentType(name, min, max);
     }
 
     public long getMinimum() {

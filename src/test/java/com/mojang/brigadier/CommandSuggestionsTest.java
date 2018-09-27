@@ -241,7 +241,7 @@ public class CommandSuggestionsTest {
                 .then(
                     literal("loop")
                         .then(
-                            argument("loop", integer())
+                            argument(integer("loop"))
                                 .redirect(loop)
                         )
                 )
@@ -261,14 +261,14 @@ public class CommandSuggestionsTest {
                 .then(
                     literal("as")
                         .then(
-                            argument("name", word())
+                            argument(word("name"))
                                 .redirect(execute)
                         )
                 )
                 .then(
                     literal("store")
                         .then(
-                            argument("name", word())
+                            argument(word("name"))
                                 .redirect(execute)
                         )
                 )
@@ -297,7 +297,7 @@ public class CommandSuggestionsTest {
                 .then(
                     literal("store")
                         .then(
-                            argument("name", word())
+                            argument(word("name"))
                                 .redirect(execute)
                         )
                 )

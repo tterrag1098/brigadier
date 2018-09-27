@@ -27,13 +27,13 @@ public class FloatArgumentTypeTest {
 
     @Before
     public void setUp() throws Exception {
-        type = floatArg(-100, 100);
+        type = floatArg("float", -100, 100);
     }
 
     @Test
     public void parse() throws Exception {
         final StringReader reader = new StringReader("15");
-        assertThat(floatArg().parse(reader), is(15f));
+        assertThat(floatArg("float").parse(reader), is(15f));
         assertThat(reader.canRead(), is(false));
     }
 
@@ -41,7 +41,7 @@ public class FloatArgumentTypeTest {
     public void parse_tooSmall() throws Exception {
         final StringReader reader = new StringReader("-5");
         try {
-            floatArg(0, 100).parse(reader);
+            floatArg("float", 0, 100).parse(reader);
             fail();
         } catch (final CommandSyntaxException ex) {
             assertThat(ex.getType(), is(CommandSyntaxException.BUILT_IN_EXCEPTIONS.floatTooLow()));
@@ -53,7 +53,7 @@ public class FloatArgumentTypeTest {
     public void parse_tooBig() throws Exception {
         final StringReader reader = new StringReader("5");
         try {
-            floatArg(-100, 0).parse(reader);
+            floatArg("float", -100, 0).parse(reader);
             fail();
         } catch (final CommandSyntaxException ex) {
             assertThat(ex.getType(), is(CommandSyntaxException.BUILT_IN_EXCEPTIONS.floatTooHigh()));
@@ -64,18 +64,18 @@ public class FloatArgumentTypeTest {
     @Test
     public void testEquals() throws Exception {
         new EqualsTester()
-            .addEqualityGroup(floatArg(), floatArg())
-            .addEqualityGroup(floatArg(-100, 100), floatArg(-100, 100))
-            .addEqualityGroup(floatArg(-100, 50), floatArg(-100, 50))
-            .addEqualityGroup(floatArg(-50, 100), floatArg(-50, 100))
+            .addEqualityGroup(floatArg("float"), floatArg("float"))
+            .addEqualityGroup(floatArg("float", -100, 100), floatArg("float", -100, 100))
+            .addEqualityGroup(floatArg("float", -100, 50), floatArg("float", -100, 50))
+            .addEqualityGroup(floatArg("float", -50, 100), floatArg("float", -50, 100))
             .testEquals();
     }
 
     @Test
     public void testToString() throws Exception {
-        assertThat(floatArg(), hasToString("float()"));
-        assertThat(floatArg(-100), hasToString("float(-100.0)"));
-        assertThat(floatArg(-100, 100), hasToString("float(-100.0, 100.0)"));
-        assertThat(floatArg(Integer.MIN_VALUE, 100), hasToString("float(-2.14748365E9, 100.0)"));
+        assertThat(floatArg("float"), hasToString("float()"));
+        assertThat(floatArg("float", -100), hasToString("float(-100.0)"));
+        assertThat(floatArg("float", -100, 100), hasToString("float(-100.0, 100.0)"));
+        assertThat(floatArg("float", Integer.MIN_VALUE, 100), hasToString("float(-2.14748365E9, 100.0)"));
     }
 }

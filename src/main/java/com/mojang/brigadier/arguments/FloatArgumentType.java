@@ -10,31 +10,28 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class FloatArgumentType implements ArgumentType<Float> {
+public class FloatArgumentType extends SimpleArgumentType<Float> {
     private static final Collection<String> EXAMPLES = Arrays.asList("0", "1.2", ".5", "-1", "-.5", "-1234.56");
 
     private final float minimum;
     private final float maximum;
 
-    private FloatArgumentType(final float minimum, final float maximum) {
+    private FloatArgumentType(String name, final float minimum, final float maximum) {
+        super(name);
         this.minimum = minimum;
         this.maximum = maximum;
     }
 
-    public static FloatArgumentType floatArg() {
-        return floatArg(-Float.MAX_VALUE);
+    public static FloatArgumentType floatArg(String name) {
+        return floatArg(name, -Float.MAX_VALUE);
     }
 
-    public static FloatArgumentType floatArg(final float min) {
-        return floatArg(min, Float.MAX_VALUE);
+    public static FloatArgumentType floatArg(String name, final float min) {
+        return floatArg(name, min, Float.MAX_VALUE);
     }
 
-    public static FloatArgumentType floatArg(final float min, final float max) {
-        return new FloatArgumentType(min, max);
-    }
-
-    public static float getFloat(final CommandContext<?> context, final String name) {
-        return context.getArgument(name, Float.class);
+    public static FloatArgumentType floatArg(String name, final float min, final float max) {
+        return new FloatArgumentType(name, min, max);
     }
 
     public float getMinimum() {

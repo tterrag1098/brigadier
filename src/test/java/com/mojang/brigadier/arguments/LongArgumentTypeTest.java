@@ -27,13 +27,13 @@ public class LongArgumentTypeTest {
 
     @Before
     public void setUp() throws Exception {
-        type = longArg(-100, 1_000_000_000_000L);
+        type = longArg("long", -100, 1_000_000_000_000L);
     }
 
     @Test
     public void parse() throws Exception {
         final StringReader reader = new StringReader("15");
-        assertThat(longArg().parse(reader), is(15L));
+        assertThat(longArg("long").parse(reader), is(15L));
         assertThat(reader.canRead(), is(false));
     }
 
@@ -41,7 +41,7 @@ public class LongArgumentTypeTest {
     public void parse_tooSmall() throws Exception {
         final StringReader reader = new StringReader("-5");
         try {
-            longArg(0, 100).parse(reader);
+            longArg("long", 0, 100).parse(reader);
             fail();
         } catch (final CommandSyntaxException ex) {
             assertThat(ex.getType(), is(CommandSyntaxException.BUILT_IN_EXCEPTIONS.longTooLow()));
@@ -53,7 +53,7 @@ public class LongArgumentTypeTest {
     public void parse_tooBig() throws Exception {
         final StringReader reader = new StringReader("5");
         try {
-            longArg(-100, 0).parse(reader);
+            longArg("long", -100, 0).parse(reader);
             fail();
         } catch (final CommandSyntaxException ex) {
             assertThat(ex.getType(), is(CommandSyntaxException.BUILT_IN_EXCEPTIONS.longTooHigh()));
@@ -64,18 +64,18 @@ public class LongArgumentTypeTest {
     @Test
     public void testEquals() throws Exception {
         new EqualsTester()
-            .addEqualityGroup(longArg(), longArg())
-            .addEqualityGroup(longArg(-100, 100), longArg(-100, 100))
-            .addEqualityGroup(longArg(-100, 50), longArg(-100, 50))
-            .addEqualityGroup(longArg(-50, 100), longArg(-50, 100))
+            .addEqualityGroup(longArg("long"), longArg("long"))
+            .addEqualityGroup(longArg("long", -100, 100), longArg("long", -100, 100))
+            .addEqualityGroup(longArg("long", -100, 50), longArg("long", -100, 50))
+            .addEqualityGroup(longArg("long", -50, 100), longArg("long", -50, 100))
             .testEquals();
     }
 
     @Test
     public void testToString() throws Exception {
-        assertThat(longArg(), hasToString("longArg()"));
-        assertThat(longArg(-100), hasToString("longArg(-100)"));
-        assertThat(longArg(-100, 100), hasToString("longArg(-100, 100)"));
-        assertThat(longArg(Long.MIN_VALUE, 100), hasToString("longArg(-9223372036854775808, 100)"));
+        assertThat(longArg("long"), hasToString("longArg()"));
+        assertThat(longArg("long", -100), hasToString("longArg(-100)"));
+        assertThat(longArg("long", -100, 100), hasToString("longArg(-100, 100)"));
+        assertThat(longArg("long", Long.MIN_VALUE, 100), hasToString("longArg(-9223372036854775808, 100)"));
     }
 }

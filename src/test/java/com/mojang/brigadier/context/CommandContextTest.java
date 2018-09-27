@@ -6,6 +6,8 @@ package com.mojang.brigadier.context;
 import com.google.common.testing.EqualsTester;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import org.junit.Before;
@@ -17,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandContextTest {
@@ -28,6 +31,8 @@ public class CommandContextTest {
 
     @Mock
     private CommandNode<Object> rootNode;
+    
+    private final IntegerArgumentType arg = integer("int");
 
     @Before
     public void setUp() throws Exception {
@@ -36,19 +41,20 @@ public class CommandContextTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetArgument_nonexistent() throws Exception {
-        builder.build("").getArgument("foo", Object.class);
+        builder.build("").getArgument(arg);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetArgument_wrongType() throws Exception {
-        final CommandContext<Object> context = builder.withArgument("foo", new ParsedArgument<>(0, 1, 123)).build("123");
-        context.getArgument("foo", String.class);
-    }
+    // Not needed
+//    @Test(expected = IllegalArgumentException.class)
+//    public void testGetArgument_wrongType() throws Exception {
+//        final CommandContext<Object> context = builder.withArgument(arg, new ParsedArgument<>(0, 1, 123)).build("123");
+//        context.getArgument(arg);
+//    }
 
     @Test
     public void testGetArgument() throws Exception {
-        final CommandContext<Object> context = builder.withArgument("foo", new ParsedArgument<>(0, 1, 123)).build("123");
-        assertThat(context.getArgument("foo", int.class), is(123));
+        final CommandContext<Object> context = builder.withArgument(arg, new ParsedArgument<>(0, 1, 123)).build("123");
+        assertThat(context.getArgument(arg), is(123));
     }
 
     @Test
@@ -77,7 +83,7 @@ public class CommandContextTest {
             .addEqualityGroup(new CommandContextBuilder<>(dispatcher, otherSource, rootNode, 0).build(""), new CommandContextBuilder<>(dispatcher, otherSource, rootNode, 0).build(""))
             .addEqualityGroup(new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withCommand(command).build(""), new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withCommand(command).build(""))
             .addEqualityGroup(new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withCommand(otherCommand).build(""), new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withCommand(otherCommand).build(""))
-            .addEqualityGroup(new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withArgument("foo", new ParsedArgument<>(0, 1, 123)).build("123"), new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withArgument("foo", new ParsedArgument<>(0, 1, 123)).build("123"))
+            .addEqualityGroup(new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withArgument(arg, new ParsedArgument<>(0, 1, 123)).build("123"), new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withArgument(arg, new ParsedArgument<>(0, 1, 123)).build("123"))
             .addEqualityGroup(new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withNode(node, StringRange.between(0, 3)).withNode(otherNode, StringRange.between(4, 6)).build("123 456"), new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withNode(node, StringRange.between(0, 3)).withNode(otherNode, StringRange.between(4, 6)).build("123 456"))
             .addEqualityGroup(new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withNode(otherNode, StringRange.between(0, 3)).withNode(node, StringRange.between(4, 6)).build("123 456"), new CommandContextBuilder<>(dispatcher, source, rootNode, 0).withNode(otherNode, StringRange.between(0, 3)).withNode(node, StringRange.between(4, 6)).build("123 456"))
             .testEquals();

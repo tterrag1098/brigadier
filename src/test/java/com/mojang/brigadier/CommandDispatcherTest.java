@@ -195,7 +195,7 @@ public class CommandDispatcherTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testParseIncompleteArgument() throws Exception {
-        subject.register(literal("foo").then(argument("bar", integer()).executes(command)));
+        subject.register(literal("foo").then(argument(integer("bar")).executes(command)));
 
         final ParseResults<Object> parse = subject.parse("foo ", source);
         assertThat(parse.getReader().getRemaining(), equalTo(" "));
@@ -211,13 +211,13 @@ public class CommandDispatcherTest {
         subject.register(
             literal("test")
                 .then(
-                    argument("incorrect", integer())
+                    argument(integer("incorrect"))
                         .executes(command)
                 )
                 .then(
-                    argument("right", integer())
+                    argument(integer("right"))
                         .then(
-                            argument("sub", integer())
+                            argument(integer("sub"))
                                 .executes(subCommand)
                         )
                 )
@@ -237,13 +237,13 @@ public class CommandDispatcherTest {
         final LiteralCommandNode<Object> real = subject.register(
             literal("test")
                 .then(
-                    argument("incorrect", integer())
+                    argument(integer("incorrect"))
                         .executes(command)
                 )
                 .then(
-                    argument("right", integer())
+                    argument(integer("right"))
                         .then(
-                            argument("sub", integer())
+                            argument(integer("sub"))
                                 .executes(subCommand)
                         )
                 )
@@ -329,7 +329,7 @@ public class CommandDispatcherTest {
     @Test
     public void testExecuteOrphanedSubcommand() throws Exception {
         subject.register(literal("foo").then(
-            argument("bar", integer())
+            argument(integer("bar"))
         ).executes(command));
 
         try {
@@ -354,7 +354,7 @@ public class CommandDispatcherTest {
 
     @Test
     public void parse_noSpaceSeparator() throws Exception {
-        subject.register(literal("foo").then(argument("bar", integer()).executes(command)));
+        subject.register(literal("foo").then(argument(integer("bar")).executes(command)));
 
         try {
             subject.execute("foo$", source);
@@ -368,7 +368,7 @@ public class CommandDispatcherTest {
     @Test
     public void testExecuteInvalidSubcommand() throws Exception {
         subject.register(literal("foo").then(
-            argument("bar", integer())
+            argument(integer("bar"))
         ).executes(command));
 
         try {

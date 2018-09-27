@@ -26,7 +26,7 @@ public class ArgumentBuilderTest {
 
     @Test
     public void testArguments() throws Exception {
-        final RequiredArgumentBuilder<Object, ?> argument = argument("bar", integer());
+        final RequiredArgumentBuilder<Object, ?> argument = argument(integer("bar"));
 
         builder.then(argument);
 

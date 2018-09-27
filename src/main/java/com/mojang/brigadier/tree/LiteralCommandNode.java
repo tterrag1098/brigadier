@@ -6,6 +6,7 @@ package com.mojang.brigadier.tree;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.CommandContextBuilder;
@@ -28,11 +29,6 @@ public class LiteralCommandNode<S> extends CommandNode<S> {
     }
 
     public String getLiteral() {
-        return literal;
-    }
-
-    @Override
-    public String getName() {
         return literal;
     }
 
@@ -125,5 +121,22 @@ public class LiteralCommandNode<S> extends CommandNode<S> {
     @Override
     public String toString() {
         return "<literal " + literal + ">";
+    }
+
+    @Override
+    public ArgumentType<?> getType() {
+        return new ArgumentType<LiteralCommandNode<S>>() {
+
+            @Override
+            public String getName() {
+                return literal;
+            }
+
+            @Override
+            public LiteralCommandNode<S> parse(StringReader reader) throws CommandSyntaxException {
+                return LiteralCommandNode.this;
+            }
+            
+        };
     }
 }

@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.RedirectModifier;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.List;
@@ -46,8 +47,8 @@ public class CommandContextBuilder<S> {
         return rootNode;
     }
 
-    public CommandContextBuilder<S> withArgument(final String name, final ParsedArgument<S, ?> argument) {
-        this.arguments.put(name, argument);
+    public <T> CommandContextBuilder<S> withArgument(final ArgumentType<T> arg, final ParsedArgument<S, T> argument) {
+        this.arguments.put(arg.getName(), argument);
         return this;
     }
 

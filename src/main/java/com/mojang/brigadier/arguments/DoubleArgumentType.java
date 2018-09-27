@@ -10,31 +10,28 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class DoubleArgumentType implements ArgumentType<Double> {
+public class DoubleArgumentType extends SimpleArgumentType<Double> {
     private static final Collection<String> EXAMPLES = Arrays.asList("0", "1.2", ".5", "-1", "-.5", "-1234.56");
 
     private final double minimum;
     private final double maximum;
 
-    private DoubleArgumentType(final double minimum, final double maximum) {
+    private DoubleArgumentType(String name, final double minimum, final double maximum) {
+        super(name);
         this.minimum = minimum;
         this.maximum = maximum;
     }
 
-    public static DoubleArgumentType doubleArg() {
-        return doubleArg(-Double.MAX_VALUE);
+    public static DoubleArgumentType doubleArg(String name) {
+        return doubleArg(name, -Double.MAX_VALUE);
     }
 
-    public static DoubleArgumentType doubleArg(final double min) {
-        return doubleArg(min, Double.MAX_VALUE);
+    public static DoubleArgumentType doubleArg(String name, final double min) {
+        return doubleArg(name, min, Double.MAX_VALUE);
     }
 
-    public static DoubleArgumentType doubleArg(final double min, final double max) {
-        return new DoubleArgumentType(min, max);
-    }
-
-    public static double getDouble(final CommandContext<?> context, final String name) {
-        return context.getArgument(name, Double.class);
+    public static DoubleArgumentType doubleArg(String name, final double min, final double max) {
+        return new DoubleArgumentType(name, min, max);
     }
 
     public double getMinimum() {

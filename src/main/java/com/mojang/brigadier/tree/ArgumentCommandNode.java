@@ -24,29 +24,23 @@ public class ArgumentCommandNode<S, T> extends CommandNode<S> {
     private static final String USAGE_ARGUMENT_OPEN = "<";
     private static final String USAGE_ARGUMENT_CLOSE = ">";
 
-    private final String name;
     private final ArgumentType<T> type;
     private final SuggestionProvider<S> customSuggestions;
 
-    public ArgumentCommandNode(final String name, final ArgumentType<T> type, final Command<S> command, final Predicate<S> requirement, final CommandNode<S> redirect, final RedirectModifier<S> modifier, final boolean forks, final SuggestionProvider<S> customSuggestions) {
+    public ArgumentCommandNode(final ArgumentType<T> type, final Command<S> command, final Predicate<S> requirement, final CommandNode<S> redirect, final RedirectModifier<S> modifier, final boolean forks, final SuggestionProvider<S> customSuggestions) {
         super(command, requirement, redirect, modifier, forks);
-        this.name = name;
         this.type = type;
         this.customSuggestions = customSuggestions;
     }
 
+    @Override
     public ArgumentType<T> getType() {
         return type;
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public String getUsageText() {
-        return USAGE_ARGUMENT_OPEN + name + USAGE_ARGUMENT_CLOSE;
+        return USAGE_ARGUMENT_OPEN + type.getName() + USAGE_ARGUMENT_CLOSE;
     }
 
     public SuggestionProvider<S> getCustomSuggestions() {
@@ -59,7 +53,7 @@ public class ArgumentCommandNode<S, T> extends CommandNode<S> {
         final T result = type.parse(reader);
         final ParsedArgument<S, T> parsed = new ParsedArgument<>(start, reader.getCursor(), result);
 
-        contextBuilder.withArgument(name, parsed);
+        contextBuilder.withArgument(type, parsed);
         contextBuilder.withNode(this, parsed.getRange());
     }
 
@@ -74,7 +68,7 @@ public class ArgumentCommandNode<S, T> extends CommandNode<S> {
 
     @Override
     public RequiredArgumentBuilder<S, T> createBuilder() {
-        final RequiredArgumentBuilder<S, T> builder = RequiredArgumentBuilder.argument(name, type);
+        final RequiredArgumentBuilder<S, T> builder = RequiredArgumentBuilder.argument(type);
         builder.requires(getRequirement());
         builder.forward(getRedirect(), getRedirectModifier(), isFork());
         builder.suggests(customSuggestions);
@@ -102,21 +96,18 @@ public class ArgumentCommandNode<S, T> extends CommandNode<S> {
 
         final ArgumentCommandNode that = (ArgumentCommandNode) o;
 
-        if (!name.equals(that.name)) return false;
         if (!type.equals(that.type)) return false;
         return super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + type.hashCode();
-        return result;
+        return type.hashCode();
     }
 
     @Override
     protected String getSortedKey() {
-        return name;
+        return type.getName();
     }
 
     @Override
@@ -126,6 +117,6 @@ public class ArgumentCommandNode<S, T> extends CommandNode<S> {
 
     @Override
     public String toString() {
-        return "<argument " + name + ":" + type +">";
+        return "<argument " + type.getName() + ":" + type +">";
     }
 }

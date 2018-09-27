@@ -27,13 +27,13 @@ public class IntegerArgumentTypeTest {
 
     @Before
     public void setUp() throws Exception {
-        type = integer(-100, 100);
+        type = integer("int", -100, 100);
     }
 
     @Test
     public void parse() throws Exception {
         final StringReader reader = new StringReader("15");
-        assertThat(integer().parse(reader), is(15));
+        assertThat(integer("int").parse(reader), is(15));
         assertThat(reader.canRead(), is(false));
     }
 
@@ -41,7 +41,7 @@ public class IntegerArgumentTypeTest {
     public void parse_tooSmall() throws Exception {
         final StringReader reader = new StringReader("-5");
         try {
-            integer(0, 100).parse(reader);
+            integer("int", 0, 100).parse(reader);
             fail();
         } catch (final CommandSyntaxException ex) {
             assertThat(ex.getType(), is(CommandSyntaxException.BUILT_IN_EXCEPTIONS.integerTooLow()));
@@ -53,7 +53,7 @@ public class IntegerArgumentTypeTest {
     public void parse_tooBig() throws Exception {
         final StringReader reader = new StringReader("5");
         try {
-            integer(-100, 0).parse(reader);
+            integer("int", -100, 0).parse(reader);
             fail();
         } catch (final CommandSyntaxException ex) {
             assertThat(ex.getType(), is(CommandSyntaxException.BUILT_IN_EXCEPTIONS.integerTooHigh()));
@@ -64,18 +64,18 @@ public class IntegerArgumentTypeTest {
     @Test
     public void testEquals() throws Exception {
         new EqualsTester()
-            .addEqualityGroup(integer(), integer())
-            .addEqualityGroup(integer(-100, 100), integer(-100, 100))
-            .addEqualityGroup(integer(-100, 50), integer(-100, 50))
-            .addEqualityGroup(integer(-50, 100), integer(-50, 100))
+            .addEqualityGroup(integer("int"), integer("int"))
+            .addEqualityGroup(integer("int", -100, 100), integer("int", -100, 100))
+            .addEqualityGroup(integer("int", -100, 50), integer("int", -100, 50))
+            .addEqualityGroup(integer("int", -50, 100), integer("int", -50, 100))
             .testEquals();
     }
 
     @Test
     public void testToString() throws Exception {
-        assertThat(integer(), hasToString("integer()"));
-        assertThat(integer(-100), hasToString("integer(-100)"));
-        assertThat(integer(-100, 100), hasToString("integer(-100, 100)"));
-        assertThat(integer(Integer.MIN_VALUE, 100), hasToString("integer(-2147483648, 100)"));
+        assertThat(integer("int"), hasToString("integer()"));
+        assertThat(integer("int", -100), hasToString("integer(-100)"));
+        assertThat(integer("int", -100, 100), hasToString("integer(-100, 100)"));
+        assertThat(integer("int", Integer.MIN_VALUE, 100), hasToString("integer(-2147483648, 100)"));
     }
 }

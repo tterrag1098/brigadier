@@ -31,7 +31,7 @@ public class StringArgumentTypeTest {
     public void testParseWord() throws Exception {
         final StringReader reader = mock(StringReader.class);
         when(reader.readUnquotedString()).thenReturn("hello");
-        assertThat(word().parse(reader), equalTo("hello"));
+        assertThat(word("word").parse(reader), equalTo("hello"));
         verify(reader).readUnquotedString();
     }
 
@@ -39,20 +39,20 @@ public class StringArgumentTypeTest {
     public void testParseString() throws Exception {
         final StringReader reader = mock(StringReader.class);
         when(reader.readString()).thenReturn("hello world");
-        assertThat(string().parse(reader), equalTo("hello world"));
+        assertThat(string("string").parse(reader), equalTo("hello world"));
         verify(reader).readString();
     }
 
     @Test
     public void testParseGreedyString() throws Exception {
         final StringReader reader = new StringReader("Hello world! This is a test.");
-        assertThat(greedyString().parse(reader), equalTo("Hello world! This is a test."));
+        assertThat(greedyString("greedy").parse(reader), equalTo("Hello world! This is a test."));
         assertThat(reader.canRead(), is(false));
     }
 
     @Test
     public void testToString() throws Exception {
-        assertThat(string(), hasToString("string()"));
+        assertThat(string("string"), hasToString("string()"));
     }
 
     @Test
