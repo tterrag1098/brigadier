@@ -4,6 +4,7 @@
 package com.mojang.brigadier.builder;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.Argument;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import org.junit.Before;
@@ -20,8 +21,11 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RequiredArgumentBuilderTest {
+
     @Mock
     private ArgumentType<Integer> type;
+    
+    private Argument<Integer> arg;
     private RequiredArgumentBuilder<Object, Integer> builder;
     @Mock
     private
@@ -29,7 +33,8 @@ public class RequiredArgumentBuilderTest {
 
     @Before
     public void setUp() throws Exception {
-        builder = argument("foo", type);
+        arg = new Argument.Impl<>(type, "foo");
+        builder = argument(arg);
     }
 
     @Test
@@ -37,7 +42,7 @@ public class RequiredArgumentBuilderTest {
         final ArgumentCommandNode<Object, Integer> node = builder.build();
 
         assertThat(node.getName(), is("foo"));
-        assertThat(node.getType(), is(type));
+        assertThat(node.getType(), is(arg));
     }
 
     @Test
@@ -45,7 +50,7 @@ public class RequiredArgumentBuilderTest {
         final ArgumentCommandNode<Object, Integer> node = builder.executes(command).build();
 
         assertThat(node.getName(), is("foo"));
-        assertThat(node.getType(), is(type));
+        assertThat(node.getType(), is(arg));
         assertThat(node.getCommand(), is(command));
     }
 

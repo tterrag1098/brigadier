@@ -3,23 +3,26 @@
 
 package com.mojang.brigadier.builder;
 
+import com.mojang.brigadier.arguments.Argument;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 
 public class RequiredArgumentBuilder<S, T> extends ArgumentBuilder<S, RequiredArgumentBuilder<S, T>> {
-    private final String name;
-    private final ArgumentType<T> type;
+    private final Argument<T> arg;
     private SuggestionProvider<S> suggestionsProvider = null;
 
-    private RequiredArgumentBuilder(final String name, final ArgumentType<T> type) {
-        this.name = name;
-        this.type = type;
+    private RequiredArgumentBuilder(final Argument<T> arg) {
+        this.arg = arg;
     }
 
     public static <S, T> RequiredArgumentBuilder<S, T> argument(final String name, final ArgumentType<T> type) {
-        return new RequiredArgumentBuilder<>(name, type);
+        return argument(new Argument.Impl<>(type, name));
+    }
+
+    public static <S, T> RequiredArgumentBuilder<S, T> argument(final Argument<T> arg) {
+        return new RequiredArgumentBuilder<>(arg);
     }
 
     public RequiredArgumentBuilder<S, T> suggests(final SuggestionProvider<S> provider) {
@@ -35,17 +38,22 @@ public class RequiredArgumentBuilder<S, T> extends ArgumentBuilder<S, RequiredAr
     protected RequiredArgumentBuilder<S, T> getThis() {
         return this;
     }
-
+    
+    @Deprecated
     public ArgumentType<T> getType() {
-        return type;
+        return getArg();
+    }
+
+    public Argument<T> getArg() {
+        return arg;
     }
 
     public String getName() {
-        return name;
+        return arg.getName();
     }
 
     public ArgumentCommandNode<S, T> build() {
-        final ArgumentCommandNode<S, T> result = new ArgumentCommandNode<>(getName(), getType(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider());
+        final ArgumentCommandNode<S, T> result = new ArgumentCommandNode<>(getArg(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider());
 
         for (final CommandNode<S> argument : getArguments()) {
             result.addChild(argument);

@@ -16,19 +16,33 @@ public class StringArgumentType implements ArgumentType<String> {
     private StringArgumentType(final StringType type) {
         this.type = type;
     }
+    
+    public static final StringArgumentType WORD = new StringArgumentType(StringType.SINGLE_WORD);
+    public static final StringArgumentType STRING = new StringArgumentType(StringType.QUOTABLE_PHRASE);
+    public static final StringArgumentType GREEDY_STRING = new StringArgumentType(StringType.GREEDY_PHRASE);
+    
+    @Deprecated
+    public static StringArgumentType word() { return WORD; }
 
-    public static StringArgumentType word() {
-        return new StringArgumentType(StringType.SINGLE_WORD);
+    public static Argument<String> word(String name) {
+        return new Argument.Impl<>(WORD, name);
+    }
+    
+    @Deprecated
+    public static StringArgumentType string() { return STRING; }
+
+    public static Argument<String> string(String name) {
+        return new Argument.Impl<>(STRING, name);
+    }
+    
+    @Deprecated
+    public static StringArgumentType greedyString() { return GREEDY_STRING; }
+
+    public static Argument<String> greedyString(String name) {
+        return new Argument.Impl<>(GREEDY_STRING, name);
     }
 
-    public static StringArgumentType string() {
-        return new StringArgumentType(StringType.QUOTABLE_PHRASE);
-    }
-
-    public static StringArgumentType greedyString() {
-        return new StringArgumentType(StringType.GREEDY_PHRASE);
-    }
-
+    @Deprecated
     public static String getString(final CommandContext<?> context, final String name) {
         return context.getArgument(name, String.class);
     }

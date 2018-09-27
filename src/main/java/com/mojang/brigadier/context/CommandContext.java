@@ -7,6 +7,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.primitives.Primitives;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
+import com.mojang.brigadier.arguments.Argument;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class CommandContext<S> {
     }
 
     @SuppressWarnings("unchecked")
+    @Deprecated
     public <V> V getArgument(final String name, final Class<V> clazz) {
         final ParsedArgument<S, ?> argument = arguments.get(name);
 
@@ -78,6 +80,17 @@ public class CommandContext<S> {
         } else {
             throw new IllegalArgumentException("Argument '" + name + "' is defined as " + result.getClass().getSimpleName() + ", not " + clazz);
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <V> V getArgument(Argument<V> arg) {
+        final ParsedArgument<S, ?> argument = arguments.get(arg.getName());
+
+        if (argument == null) {
+            throw new IllegalArgumentException("No such argument '" + arg.getName() + "' exists on this command");
+        }
+        
+        return (V) argument.getResult();
     }
 
     @Override

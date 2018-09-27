@@ -13,16 +13,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-public class BoolArgumentType implements ArgumentType<Boolean> {
+public enum BoolArgumentType implements ArgumentType<Boolean> {
+    
+    INSTANCE;
+    
     private static final Collection<String> EXAMPLES = Arrays.asList("true", "false");
 
     private BoolArgumentType() {
     }
 
+    @Deprecated
     public static BoolArgumentType bool() {
-        return new BoolArgumentType();
+        return INSTANCE;
+    }
+    
+    public static Argument<Boolean> bool(String name) {
+        return new Argument.Impl<>(bool(), name);
     }
 
+    @Deprecated
     public static boolean getBool(final CommandContext<?> context, final String name) {
         return context.getArgument(name, Boolean.class);
     }

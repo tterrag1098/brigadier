@@ -21,18 +21,34 @@ public class LongArgumentType implements ArgumentType<Long> {
         this.maximum = maximum;
     }
 
+    @Deprecated
     public static LongArgumentType longArg() {
         return longArg(Long.MIN_VALUE);
     }
+    
+    public static Argument<Long> longArg(String name) {
+        return longArg(name, Long.MIN_VALUE);
+    }
 
+    @Deprecated
     public static LongArgumentType longArg(final long min) {
         return longArg(min, Long.MAX_VALUE);
     }
+    
+    public static Argument<Long> longArg(String name, final long min) {
+        return longArg(name, min, Long.MAX_VALUE);
+    }
 
+    @Deprecated
     public static LongArgumentType longArg(final long min, final long max) {
         return new LongArgumentType(min, max);
     }
 
+    public static Argument<Long> longArg(String name, final long min, final long max) {
+        return new Argument.Impl<>(longArg(min, max), name);
+    }
+    
+    @Deprecated
     public static long getLong(final CommandContext<?> context, final String name) {
         return context.getArgument(name, long.class);
     }

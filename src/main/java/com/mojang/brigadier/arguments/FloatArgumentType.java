@@ -21,18 +21,34 @@ public class FloatArgumentType implements ArgumentType<Float> {
         this.maximum = maximum;
     }
 
+    @Deprecated
     public static FloatArgumentType floatArg() {
         return floatArg(-Float.MAX_VALUE);
     }
 
+    public static Argument<Float> floatArg(String name) {
+        return floatArg(name, -Float.MAX_VALUE);
+    }
+    
+    @Deprecated
     public static FloatArgumentType floatArg(final float min) {
         return floatArg(min, Float.MAX_VALUE);
     }
 
+    public static Argument<Float> floatArg(String name, final float min) {
+        return floatArg(name, min, Float.MAX_VALUE);
+    }
+
+    @Deprecated
     public static FloatArgumentType floatArg(final float min, final float max) {
         return new FloatArgumentType(min, max);
     }
 
+    public static Argument<Float> floatArg(String name, final float min, final float max) {
+        return new Argument.Impl<>(floatArg(min, max), name);
+    }
+    
+    @Deprecated
     public static float getFloat(final CommandContext<?> context, final String name) {
         return context.getArgument(name, Float.class);
     }

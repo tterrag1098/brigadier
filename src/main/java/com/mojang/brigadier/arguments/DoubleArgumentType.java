@@ -3,12 +3,12 @@
 
 package com.mojang.brigadier.arguments;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 public class DoubleArgumentType implements ArgumentType<Double> {
     private static final Collection<String> EXAMPLES = Arrays.asList("0", "1.2", ".5", "-1", "-.5", "-1234.56");
@@ -21,18 +21,34 @@ public class DoubleArgumentType implements ArgumentType<Double> {
         this.maximum = maximum;
     }
 
+    @Deprecated
     public static DoubleArgumentType doubleArg() {
         return doubleArg(-Double.MAX_VALUE);
     }
-
+    
+    public static Argument<Double> doubleArg(String name) {
+        return doubleArg(name, -Double.MAX_VALUE);
+    }
+    
+    @Deprecated
     public static DoubleArgumentType doubleArg(final double min) {
         return doubleArg(min, Double.MAX_VALUE);
     }
+    
+    public static Argument<Double> doubleArg(String name, final double min) {
+        return doubleArg(name, min, Double.MAX_VALUE);
+    }
 
+    @Deprecated
     public static DoubleArgumentType doubleArg(final double min, final double max) {
         return new DoubleArgumentType(min, max);
     }
-
+    
+    public static Argument<Double> doubleArg(String name, final double min, final double max) {
+        return new Argument.Impl<>(doubleArg(min, max), name);
+    }
+    
+    @Deprecated
     public static double getDouble(final CommandContext<?> context, final String name) {
         return context.getArgument(name, Double.class);
     }

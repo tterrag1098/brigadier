@@ -21,18 +21,34 @@ public class IntegerArgumentType implements ArgumentType<Integer> {
         this.maximum = maximum;
     }
 
+    @Deprecated
     public static IntegerArgumentType integer() {
         return integer(Integer.MIN_VALUE);
     }
+    
+    public static Argument<Integer> integer(String name) {
+        return integer(name, Integer.MIN_VALUE);
+    }
 
+    @Deprecated
     public static IntegerArgumentType integer(final int min) {
         return integer(min, Integer.MAX_VALUE);
     }
+    
+    public static Argument<Integer> integer(String name, final int min) {
+        return integer(name, min, Integer.MAX_VALUE);
+    }
 
+    @Deprecated
     public static IntegerArgumentType integer(final int min, final int max) {
         return new IntegerArgumentType(min, max);
     }
+    
+    public static Argument<Integer> integer(String name, final int min, final int max) {
+        return new Argument.Impl<>(integer(min, max), name);
+    }
 
+    @Deprecated
     public static int getInteger(final CommandContext<?> context, final String name) {
         return context.getArgument(name, int.class);
     }
